@@ -2,15 +2,14 @@ FROM php:8.2-apache
 
 RUN echo "ServerName SellerServiceSandbox" >> /etc/apache2/apache2.conf
 
+
+# System dependencies
 RUN apt-get update \
     && apt-get install -qq -y --no-install-recommends \
-    cron \
-    vim \
     locales \
-    coreutils \
-    apt-utils \
     git \
     unzip \
+    curl \
     libicu-dev \
     g++ \
     libpng-dev \
@@ -19,14 +18,11 @@ RUN apt-get update \
     libonig-dev \
     libxslt-dev \
     zlib1g-dev \
-    libsasl2-dev \
-    libssl-dev \
-    librdkafka-dev \
     libsqlite3-dev \
-    curl \
     && rm -rf /var/lib/apt/lists/*
 
 
+# Locales
 RUN echo "en_US.UTF-8 UTF-8" >> /etc/locale.gen && \
     echo "fa_IR.UTF-8 UTF-8" >> /etc/locale.gen && \
     locale-gen
@@ -56,26 +52,7 @@ RUN docker-php-ext-install \
     && a2enmod rewrite
 
 
-# APCU
-RUN pecl channel-update pecl.php.net \
-    && pecl install apcu \
-    && docker-php-ext-enable apcu  
-
-
-# Redis
-RUN pecl channel-update pecl.php.net \
-    && pecl install redis \
-    && docker-php-ext-enable redis
-
-
-# AMQP
-ADD https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions /usr/local/bin/
-
-RUN chmod +x /usr/local/bin/install-php-extensions && \
-    install-php-extensions amqp
-
-
-# Apache config
+# Apache virtual host
 COPY ./Docker/worker/vhosts /etc/apache2/sites-enabled
 
 
@@ -92,7 +69,7 @@ RUN composer install \
     --optimize-autoloader
 
 
-# Prepare SQLite storage
+# Prepare SQLite database
 RUN mkdir -p var && \
     touch var/data.db && \
     chmod -R 777 var
