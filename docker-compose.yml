@@ -5,25 +5,7 @@ services:
     build: ./
     container_name: ss_worker
     restart: always
-    depends_on:
-      - ss_mysql
-    links:
-      - ss_mysql
     ports:
       - "8000:80"
     volumes:
-      - ./Docker/worker/vhosts:/etc/apache2/sites-enabled
       - ./:/var/www
-
-  ss_mysql:
-      container_name: ss_mysql
-      image: mysql:8.0
-      cap_add:
-        - SYS_NICE
-      environment:
-        - MYSQL_DATABASE=seller_service
-        - MYSQL_ROOT_PASSWORD=root
-      ports:
-        - '3306:3306'
-      volumes:
-        - ./Docker/mysql:/var/lib/mysql
