@@ -22,6 +22,7 @@ RUN apt-get update \
     libsasl2-dev \
     libssl-dev \
     librdkafka-dev \
+    libsqlite3-dev \
     curl \
     && rm -rf /var/lib/apt/lists/*
 
