@@ -5,7 +5,6 @@
     "prefer-stable": true,
     "require": {
         "php": ">=8.1",
-        "ext-apcu": "*",
         "ext-ctype": "*",
         "ext-iconv": "*",
         "beberlei/assert": "3.*",
