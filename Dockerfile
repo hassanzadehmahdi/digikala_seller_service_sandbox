@@ -57,13 +57,15 @@ RUN docker-php-ext-install \
 
 
 # APCU
-RUN pecl install apcu && \
-    docker-php-ext-enable apcu
+RUN pecl channel-update pecl.php.net \
+    && pecl install apcu \
+    && docker-php-ext-enable apcu  
 
 
 # Redis
-RUN pecl install redis && \
-    docker-php-ext-enable redis
+RUN pecl channel-update pecl.php.net \
+    && pecl install redis \
+    && docker-php-ext-enable redis
 
 
 # AMQP
